@@ -1,6 +1,10 @@
 <body onkeydown=ok(event) onload=ol()>
+    <canvas id=gc>
+    </canvas>
+
     <script>
         e = 0 // e is going to contain the keyboard event
+        c = document.getElementById("gc")
 
         function ok(event) {
             e=event
@@ -35,8 +39,6 @@
 
         }
     </script>
-    <canvas id=c>
-    </canvas>
 
     <p>
     play (press 'i', 'j', 'k' or 'l' to start)
