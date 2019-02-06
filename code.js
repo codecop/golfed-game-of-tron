@@ -1,5 +1,5 @@
-e = 0 // e is going to contain the keyboard event
-c = document.getElementById("gc")
+var e = 0 // e is going to contain the keyboard event
+var c = document.getElementById("gc")
 
 function ok(event) {
     e=event
@@ -28,7 +28,7 @@ function interval() {
 
             // We replace the page's content with "game over" and the score when a collision occurs.
             document.body.innerHTML = 'game over: ' + s
-            window.clearInterval(i)
+            clearInterval(i)
         }
     }
 
