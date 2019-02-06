@@ -2,7 +2,7 @@ var e = 0 // e is going to contain the keyboard event
 var c = document.getElementById("gc")
 
 function ok(event) {
-    e=event
+    e = event
 }
 
 function ol() {
@@ -35,5 +35,5 @@ function interval() {
 }
 
 if (typeof window === "undefined") {
-    module.exports = { ok: ok, ol: ol, interval: interval};
+    module.exports = { ok: ok, ol: ol, interval: interval };
 }
