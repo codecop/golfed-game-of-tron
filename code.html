@@ -1,9 +1,20 @@
-<body onkeydown=e=event onload=loop()>
+<body onkeydown=ok(event) onload=ol()>
     <script>
-        function loop() {
+        function ok(event) {
+            e=event
+        }
+
+        function ol() {
             z=c.getContext('2d');
             z.fillRect(s=0,0,n=150,x=11325);
-            setInterval("0<x%n&x<n*n&(z[x+=[1,-n,-1,n][e.which&3]]^=1)?z.clearRect(x%n,x/n,1,1,s++):document.body.innerHTML='game over:'+s",9)
+            setInterval(interval,9)
+        }
+
+        function interval() {
+            0 < x%n &
+            x<n*n &
+            (z[x+=[1,-n,-1,n][e.which&3]]^=1) ? z.clearRect(x%n,x/n,1,1,s++) :
+                                                document.body.innerHTML='game over:'+s
         }
     </script>
     <canvas id=c>
