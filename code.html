@@ -5,16 +5,24 @@
         }
 
         function ol() {
-            z=c.getContext('2d');
-            z.fillRect(s=0,0,n=150,x=11325);
-            setInterval(interval,9)
+            z = c.getContext('2d');
+            s = 0
+            n = 150
+            x = 11325
+            z.fillRect(0, 0, n, x);
+            i = setInterval(interval, 9)
         }
 
         function interval() {
-            0 < x%n &
-            x<n*n &
-            (z[x+=[1,-n,-1,n][e.which&3]]^=1) ? z.clearRect(x%n,x/n,1,1,s++) :
-                                                document.body.innerHTML='game over:'+s
+            if (0 < x % n &
+                x < n * n &
+                (z[x += [1, -n, -1, n][e.which & 3]] ^= 1)) {
+                z.clearRect(x % n, x / n, 1, 1, s++)
+            } else {
+                document.body.innerHTML = 'game over: ' + s
+                window.clearInterval(i)
+            }
+
         }
     </script>
     <canvas id=c>
