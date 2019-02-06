@@ -1,4 +1,4 @@
-const { expect } = require('chai');
+const assert = require('assert');
 const sinon = require('sinon');
 
 // prepare a "browser"
@@ -18,10 +18,6 @@ var fs = require('fs');
 var code = eval(fs.readFileSync('./code.js') + '');
 
 describe('Game of Tron', function () {
-
-    it('should load', function () {
-        expect(code.ol).not.to.be.undefined;
-    });
 
     describe('started', function () {
 
@@ -89,7 +85,7 @@ describe('Game of Tron', function () {
             it('should die on hitting upper wall', function () {
                 code.ok({ which: 73 });
                 clock.tick(9 * 77);
-                expect(document.body.innerHTML).to.be.equal("game over: 76")
+                assert.equal('game over: 76', document.body.innerHTML)
             });
 
         });
@@ -101,7 +97,7 @@ describe('Game of Tron', function () {
             });
 
             afterEach(function () {
-                expect(document.body.innerHTML).to.be.equal("game over: 75")
+                assert.equal('game over: 75', document.body.innerHTML)
             });
 
             it('should die on hitting left wall', function () {
