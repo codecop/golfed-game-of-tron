@@ -8,6 +8,7 @@ const document = {
     body: { innerHTML: '' },
     getElementById: () => canvas,
 };
+const window = {}
 
 // declare undeclared variables.
 var z, g, s, n, x, i;
@@ -19,6 +20,15 @@ var code = eval(fs.readFileSync('./code.js') + '');
 
 describe('Game of Tron', function () {
 
+    it('should be loaded', function () {
+        if (! window.onload) {
+            assert.fail('onload not set')
+        }
+        if (! window.onkeydown) {
+            assert.fail('onkeydown not set')
+        }
+    });
+
     describe('started', function () {
 
         var clock;
@@ -29,9 +39,9 @@ describe('Game of Tron', function () {
 
             context.fillRect = sinon.spy()
             context.clearRect = sinon.spy()
-            code.ok(void (0));
+            window.onkeydown(void (0));
 
-            code.ol();
+            window.onload();
         });
 
         afterEach(function () {
@@ -51,25 +61,25 @@ describe('Game of Tron', function () {
         describe('playing', function () {
 
             it('should go up', function () {
-                code.ok({ which: 73 }); // i = up
+                window.onkeydown({ which: 73 }); // i = up
                 clock.tick(9);
                 sinon.assert.calledWith(context.clearRect, 75, 74.5, 1, 1, 0);
             });
 
             it('should go left', function () {
-                code.ok({ which: 74 }); // j = left
+                window.onkeydown({ which: 74 }); // j = left
                 clock.tick(9);
                 sinon.assert.calledWith(context.clearRect, 74, 75.49333333333334, 1, 1, 0);
             });
 
             it('should go down', function () {
-                code.ok({ which: 75 }); // k = down
+                window.onkeydown({ which: 75 }); // k = down
                 clock.tick(9);
                 sinon.assert.calledWith(context.clearRect, 75, 76.5, 1, 1, 0);
             });
 
             it('should go right', function () {
-                code.ok({ which: 76 }); // l = right
+                window.onkeydown({ which: 76 }); // l = right
                 clock.tick(9);
                 sinon.assert.calledWith(context.clearRect, 76, 75.50666666666666, 1, 1, 0);
             });
@@ -83,22 +93,22 @@ describe('Game of Tron', function () {
             });
 
             it('should die on hitting upper wall', function () {
-                code.ok({ which: 73 });
+                window.onkeydown({ which: 73 });
                 clock.tick(9 * 77);
                 assert.equal('game over: 76', document.body.innerHTML)
             });
 
             it('should die on hitting itself', function () {
-                code.ok({ which: 73 });
+                window.onkeydown({ which: 73 });
                 clock.tick(9);
-                code.ok({ which: 74 });
+                window.onkeydown({ which: 74 });
                 clock.tick(9);
-                code.ok({ which: 75 });
+                window.onkeydown({ which: 75 });
                 clock.tick(9);
-                code.ok({ which: 76 });
+                window.onkeydown({ which: 76 });
                 clock.tick(9);
 
-                code.ok({ which: 73 });
+                window.onkeydown({ which: 73 });
                 clock.tick(9);
                 assert.equal('game over: 4', document.body.innerHTML)
             });
@@ -116,17 +126,17 @@ describe('Game of Tron', function () {
             });
 
             it('should die on hitting left wall', function () {
-                code.ok({ which: 74 });
+                window.onkeydown({ which: 74 });
                 clock.tick(9 * 77);
             });
 
             it('should die on hitting lower wall', function () {
-                code.ok({ which: 75 });
+                window.onkeydown({ which: 75 });
                 clock.tick(9 * 77);
             });
 
             it('should die on hitting right wall', function () {
-                code.ok({ which: 76 });
+                window.onkeydown({ which: 76 });
                 clock.tick(9 * 77);
             });
 
