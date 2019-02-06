@@ -1,0 +1,8 @@
+syntax: glob
+
+*.orig
+*.bak
+
+# Node
+node_modules/
+npm-debug.log
