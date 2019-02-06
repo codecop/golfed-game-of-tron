@@ -52,29 +52,75 @@ describe('Game of Tron', function () {
             sinon.assert.notCalled(context.clearRect);
         });
 
-        it('should go up', function () {
-            code.ok({ which: 73 }); // i = up
-            clock.tick(9);
-            sinon.assert.calledWith(context.clearRect, 75, 74.5, 1, 1, 0);
+        describe('playing', function () {
+
+            it('should go up', function () {
+                code.ok({ which: 73 }); // i = up
+                clock.tick(9);
+                sinon.assert.calledWith(context.clearRect, 75, 74.5, 1, 1, 0);
+            });
+
+            it('should go left', function () {
+                code.ok({ which: 74 }); // j = left
+                clock.tick(9);
+                sinon.assert.calledWith(context.clearRect, 74, 75.49333333333334, 1, 1, 0);
+            });
+
+            it('should go down', function () {
+                code.ok({ which: 75 }); // k = down
+                clock.tick(9);
+                sinon.assert.calledWith(context.clearRect, 75, 76.5, 1, 1, 0);
+            });
+
+            it('should go right', function () {
+                code.ok({ which: 76 }); // l = right
+                clock.tick(9);
+                sinon.assert.calledWith(context.clearRect, 76, 75.50666666666666, 1, 1, 0);
+            });
+
         });
 
-        it('should go left', function () {
-            code.ok({ which: 74 }); // j = left
-            clock.tick(9);
-            sinon.assert.calledWith(context.clearRect, 74, 75.49333333333334, 1, 1, 0);
+        describe('end of game', function () {
+
+            beforeEach(function () {
+                document.body.innerHTML = ''
+            });
+
+            it('should die on hitting upper wall', function () {
+                code.ok({ which: 73 });
+                clock.tick(9 * 77);
+                expect(document.body.innerHTML).to.be.equal("game over: 76")
+            });
+
         });
 
-        it('should go down', function () {
-            code.ok({ which: 75 }); // k = down
-            clock.tick(9);
-            sinon.assert.calledWith(context.clearRect, 75, 76.5, 1, 1, 0);
+        describe('end of game (score 75)', function () {
+
+            beforeEach(function () {
+                document.body.innerHTML = ''
+            });
+
+            afterEach(function () {
+                expect(document.body.innerHTML).to.be.equal("game over: 75")
+            });
+
+            it('should die on hitting left wall', function () {
+                code.ok({ which: 74 });
+                clock.tick(9 * 77);
+            });
+
+            it('should die on hitting lower wall', function () {
+                code.ok({ which: 75 });
+                clock.tick(9 * 77);
+            });
+
+            it('should die on hitting right wall', function () {
+                code.ok({ which: 76 });
+                clock.tick(9 * 77);
+            });
+
         });
 
-        it('should go right', function () {
-            code.ok({ which: 76 }); // l
-            clock.tick(9);
-            sinon.assert.calledWith(context.clearRect, 76, 75.50666666666666, 1, 1, 0);
-        });
     });
 
 });
