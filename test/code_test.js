@@ -88,6 +88,21 @@ describe('Game of Tron', function () {
                 assert.equal('game over: 76', document.body.innerHTML)
             });
 
+            it('should die on hitting itself', function () {
+                code.ok({ which: 73 });
+                clock.tick(9);
+                code.ok({ which: 74 });
+                clock.tick(9);
+                code.ok({ which: 75 });
+                clock.tick(9);
+                code.ok({ which: 76 });
+                clock.tick(9);
+
+                code.ok({ which: 73 });
+                clock.tick(9);
+                assert.equal('game over: 4', document.body.innerHTML)
+            });
+
         });
 
         describe('end of game (score 75)', function () {
