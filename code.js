@@ -33,3 +33,7 @@ function interval() {
     }
 
 }
+
+if (typeof window === "undefined") {
+    module.exports = { ok: ok, ol: ol, interval: interval};
+}
