@@ -20,16 +20,14 @@ var code = eval(fs.readFileSync('./code.js') + '');
 describe('Game of Tron', function () {
 
     var clock;
-    var mockContext;
 
     before(function () {
         // see "https://sinonjs.org/releases/v3.2.1/fake-timers/"
         clock = sinon.useFakeTimers();
-        mockContext = sinon.mock(context)
+        context.fillRect = sinon.spy()
     });
 
     after(function () {
-        mockContext.verify();
         clock.restore();
     });
 
@@ -37,10 +35,11 @@ describe('Game of Tron', function () {
         expect(code.ol).not.to.be.undefined;
     });
 
-    it('should start', function () {
-        mockContext.expects('fillRect').atLeast(1);
-        // TODO mockContext.expects('fillRect').alwaysCalledWithExactly(0, 0, 150, 11325)
+    it('should draw the fillRect on start', function () {
         code.ol();
+
+        sinon.assert.calledOnce(context.fillRect);
+        sinon.assert.calledWith(context.fillRect, 0, 0, 150, 11325);
     });
 
 });
