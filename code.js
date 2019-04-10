@@ -10,7 +10,7 @@ function ol() {
     g = {} // We are going to use g to store our grid to detect collisions.
     s = 0 // keeps track of the score and is set to 0.
     n = 150
-    x = 11325 // tron's position, and is set to 11325 (11325=75*75+75=center of the grid).
+    x = 11325 // tron's position, and is set to 11325 (11325=150*75+75=center of the grid).
     z.fillRect(0, 0, n, x);
     i = setInterval(interval, 9)
 }
