@@ -3,9 +3,18 @@ function getGraphicsFor(elementId) {
     return c.getContext("2d");
 }
 
-function PixelGrid(graphics, width, height) {
+function Dimension(width, height) {
+    this.width = width;
+    this.height = height;
+
+    this.center = function() {
+        return { x: width / 2, y: height / 2 };
+    };
+}
+
+function PixelGrid(graphics, dimension) {
     function clear() {
-        graphics.fillRect(0, 0, width, height);
+        graphics.fillRect(0, 0, dimension.width, dimension.height);
     }
 
     this.putPixel = function(x, y) {
@@ -33,9 +42,9 @@ function Marker2D(maxX) {
     };
 }
 
-function Game(grid, trail, width, height, speed) {
-    var x = width / 2;
-    var y = height / 2;
+function Game(grid, trail, dimension, speed) {
+    var x = dimension.center().x;
+    var y = dimension.center().y;
     var score = 0;
 
     this.lastKeyEvent = 0;
@@ -51,7 +60,7 @@ function Game(grid, trail, width, height, speed) {
 
     this.advance = function() {
         if (this.lastKeyEvent) {
-            var hitsWall = (x <= 0) || (x >= width) || (y < 0) || (y >= height);
+            var hitsWall = (x <= 0) || (x >= dimension.width) || (y < 0) || (y >= dimension.height);
             if (hitsWall) {
                 this.collision();
                 return
@@ -99,9 +108,10 @@ var game;
 function startGame() {
     var graphics = getGraphicsFor("gc");
     var size = 150;
-    var grid = new PixelGrid(graphics, size, size);
-    var trail = new Marker2D(size);
-    game = new Game(grid, trail, size, size, 9);
+    var dimension = new Dimension(size, size);
+    var grid = new PixelGrid(graphics, dimension);
+    var trail = new Marker2D(dimension.width);
+    game = new Game(grid, trail, dimension, 9);
     game.startGameLoop();
 }
 

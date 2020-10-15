@@ -47,3 +47,7 @@ To run the test:
 ### License
 
 [New BSD License](http://opensource.org/licenses/bsd-license.php), see `license.txt` in repository.
+
+### Trial Run
+
+* 1h 45' for refactoring until everything is in classes.
