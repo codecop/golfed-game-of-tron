@@ -5,7 +5,8 @@ var graphics;
 var tronTrail = {};
 var score = 0;
 var width = 150;
-var tronPos;
+var tronX = 0;
+var tronY = 0;
 var threadHandle;
 
 function keyPressed(event) {
@@ -16,7 +17,9 @@ function startGame() {
     graphics = c.getContext('2d');
     tronTrail = {};
     score = 0;
-    tronPos = asPos(width / 2, width / 2);
+    tronX = width / 2;
+    tronY = width / 2;
+    var tronPos = asPos(tronX, tronY);
     graphics.fillRect(0, 0, width, tronPos);
     threadHandle = setInterval(advanceGame, 9);
 }
@@ -27,10 +30,7 @@ function asPos(x, y) {
 
 function advanceGame() {
     if (lastKeyEvent) {
-        var x = tronPos % width;
-        var y = Math.floor(tronPos / width);
-
-        var hitsWall = (x <= 0) || (x >= width) || (y < 0) || (y >= width);;
+        var hitsWall = (tronX <= 0) || (tronX >= width) || (tronY < 0) || (tronY >= width);;
         if (hitsWall) {
             collision();
             return
@@ -38,20 +38,20 @@ function advanceGame() {
 
         switch (lastKeyEvent.which & 3) {
             case 0:
-                x += 1;
+                tronX += 1;
                 break;
             case 1:
-                y -= 1;
+                tronY -= 1;
                 break;
             case 2:
-                x -= 1;
+                tronX -= 1;
                 break;
             case 3:
-                y += 1;
+                tronY += 1;
                 break;
         }
 
-        tronPos = asPos(x, y);
+        var tronPos = asPos(tronX, tronY);
 
         if ((tronTrail[tronPos] ^= 1)) {
 
@@ -65,9 +65,7 @@ function advanceGame() {
 }
 
 function drawTron() {
-    var x = tronPos % width;
-    var y = tronPos / width;
-    graphics.clearRect(x, y, 1, 1, 0); // 0 is ok because only 1 test
+    graphics.clearRect(tronX, tronY, 1, 1, 0); // 0 is ok because only 1 test
 }
 
 function collision() {

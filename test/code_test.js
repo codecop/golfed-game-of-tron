@@ -61,25 +61,25 @@ describe('Game of Tron', function () {
             it('should go up', function () {
                 window.onkeydown({ which: 73 }); // i = up
                 clock.tick(9);
-                sinon.assert.calledWith(context.clearRect, 75, 74.5, 1, 1, 0);
+                sinon.assert.calledWith(context.clearRect, 75, 74, 1, 1, 0);
             });
 
             it('should go left', function () {
                 window.onkeydown({ which: 74 }); // j = left
                 clock.tick(9);
-                sinon.assert.calledWith(context.clearRect, 74, 75.49333333333334, 1, 1, 0);
+                sinon.assert.calledWith(context.clearRect, 74, 75, 1, 1, 0);
             });
 
             it('should go down', function () {
                 window.onkeydown({ which: 75 }); // k = down
                 clock.tick(9);
-                sinon.assert.calledWith(context.clearRect, 75, 76.5, 1, 1, 0);
+                sinon.assert.calledWith(context.clearRect, 75, 76, 1, 1, 0);
             });
 
             it('should go right', function () {
                 window.onkeydown({ which: 76 }); // l = right
                 clock.tick(9);
-                sinon.assert.calledWith(context.clearRect, 76, 75.50666666666666, 1, 1, 0);
+                sinon.assert.calledWith(context.clearRect, 76, 75, 1, 1, 0);
             });
 
         });
