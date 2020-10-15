@@ -1,6 +1,6 @@
 var lastKeyEvent = 0;
 var ui;
-var tronTrail = {};
+var trail;
 var score = 0;
 var width = 150;
 var tronX = 0;
@@ -11,7 +11,7 @@ function keyPressed(event) {
     lastKeyEvent = event;
 }
 
-function Area() {
+function DrawingArea() {
     var c = document.getElementById("gc");
     var graphics = c.getContext('2d');
 
@@ -24,9 +24,28 @@ function Area() {
     };
 }
 
+function TronTrail(width) {
+    var tronTrail = [];
+
+    function asPos(x, y) {
+        return width * y + x;
+    }
+
+    this.isFree = function(x, y) {
+        var tronPos = asPos(x, y);
+        return tronTrail[tronPos] === undefined
+    };
+
+    this.mark = function(x, y) {
+        var tronPos = asPos(x, y);
+        tronTrail[tronPos] = 1;
+    };
+}
+
 function startGame() {
-    ui = new Area();
-    tronTrail = {};
+    ui = new DrawingArea();
+    trail = new TronTrail(width);
+
     score = 0;
     tronX = width / 2;
     tronY = width / 2;
@@ -63,9 +82,9 @@ function advanceGame() {
                 break;
         }
 
-        var tronPos = asPos(tronX, tronY);
-        tronTrail[tronPos] ^= 1;
-        if (tronTrail[tronPos] === 1) {
+
+        if (trail.isFree(tronX, tronY)) {
+            trail.mark(tronX, tronY);
 
             drawTron();
             score = score + 1;
