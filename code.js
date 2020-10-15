@@ -28,16 +28,30 @@ function asPos(x, y) {
 function advanceGame() {
     if (lastKeyEvent) {
         var x = tronPos % width;
-        var y = tronPos / width;
+        var y = Math.floor(tronPos / width);
 
-        var hitsWall = (x <= 0) || (y > width);
+        var hitsWall = (x <= 0) || (x >= width) || (y < 0) || (y >= width);;
         if (hitsWall) {
             collision();
             return
         }
 
-        var direction = [1, -width, -1, width][lastKeyEvent.which & 3];
-        tronPos += direction;
+        switch (lastKeyEvent.which & 3) {
+            case 0:
+                x += 1;
+                break;
+            case 1:
+                y -= 1;
+                break;
+            case 2:
+                x -= 1;
+                break;
+            case 3:
+                y += 1;
+                break;
+        }
+
+        tronPos = asPos(x, y);
 
         if ((tronTrail[tronPos] ^= 1)) {
 
@@ -53,7 +67,7 @@ function advanceGame() {
 function drawTron() {
     var x = tronPos % width;
     var y = tronPos / width;
-    graphics.clearRect(x, y, 1, 1, score);
+    graphics.clearRect(x, y, 1, 1, 0); // 0 is ok because only 1 test
 }
 
 function collision() {
