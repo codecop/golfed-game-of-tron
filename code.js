@@ -10,6 +10,17 @@ function Dimension(width, height) {
     this.center = function() {
         return { x: width / 2, y: height / 2 };
     };
+
+    this.isOutside = function(x, y) {
+        return !this.isInside(x, y);
+    };
+
+    this.isInside = function(x, y) {
+        return (x > 0) &&
+            (x < width) &&
+            (y >= 0) &&
+            (y < height);
+    };
 }
 
 function PixelGrid(graphics, dimension) {
@@ -60,7 +71,7 @@ function Game(grid, trail, dimension, speed) {
 
     this.advance = function() {
         if (this.lastKeyEvent) {
-            var hitsWall = (x <= 0) || (x >= dimension.width) || (y < 0) || (y >= dimension.height);
+            var hitsWall = dimension.isOutside(x, y);
             if (hitsWall) {
                 this.collision();
                 return
