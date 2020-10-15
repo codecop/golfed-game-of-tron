@@ -8,19 +8,24 @@ function Dimension(width, height) {
     this.height = height;
 
     this.center = function() {
-        return { x: width / 2, y: height / 2 };
+        return new Point(width / 2, height / 2);
     };
 
-    this.isOutside = function(x, y) {
-        return !this.isInside(x, y);
+    this.isOutside = function(point) {
+        return !this.isInside(point);
     };
 
-    this.isInside = function(x, y) {
-        return (x > 0) &&
-            (x < width) &&
-            (y >= 0) &&
-            (y < height);
+    this.isInside = function(point) {
+        return (point.x > 0) &&
+            (point.x < width) &&
+            (point.y >= 0) &&
+            (point.y < height);
     };
+}
+
+function Point(x, y) {
+    this.x = x;
+    this.y = y;
 }
 
 function PixelGrid(graphics, dimension) {
@@ -28,8 +33,8 @@ function PixelGrid(graphics, dimension) {
         graphics.fillRect(0, 0, dimension.width, dimension.height);
     }
 
-    this.putPixel = function(x, y) {
-        graphics.clearRect(x, y, 1, 1, 0);
+    this.putPixel = function(point) {
+        graphics.clearRect(point.x, point.y, 1, 1, 0);
     };
 
     clear();
@@ -38,24 +43,23 @@ function PixelGrid(graphics, dimension) {
 function Marker2D(maxX) {
     var occupied = [];
 
-    function toIndex(x, y) {
-        return maxX * y + x;
+    function toIndex(point) {
+        return maxX * point.y + point.x;
     }
 
-    this.isFree = function(x, y) {
-        var index = toIndex(x, y);
+    this.isFree = function(point) {
+        var index = toIndex(point);
         return occupied[index] === undefined
     };
 
-    this.mark = function(x, y) {
-        var index = toIndex(x, y);
+    this.mark = function(point) {
+        var index = toIndex(point);
         occupied[index] = 1;
     };
 }
 
 function Game(grid, trail, dimension, speed) {
-    var x = dimension.center().x;
-    var y = dimension.center().y;
+    var p = dimension.center();
     var score = 0;
 
     this.lastKeyEvent = 0;
@@ -71,12 +75,14 @@ function Game(grid, trail, dimension, speed) {
 
     this.advance = function() {
         if (this.lastKeyEvent) {
-            var hitsWall = dimension.isOutside(x, y);
+            var hitsWall = dimension.isOutside(p);
             if (hitsWall) {
                 this.collision();
                 return
             }
 
+            var x = p.x;
+            var y = p.y;
             switch (this.lastKeyEvent.which & 3) {
                 case 0:
                     x += 1;
@@ -91,8 +97,9 @@ function Game(grid, trail, dimension, speed) {
                     y += 1;
                     break;
             }
+            p = new Point(x, y);
 
-            if (trail.isFree(x, y)) {
+            if (trail.isFree(p)) {
                 this.tronMoves();
             } else {
                 this.collision();
@@ -101,8 +108,8 @@ function Game(grid, trail, dimension, speed) {
     };
 
     this.tronMoves = function() {
-        grid.putPixel(x, y);
-        trail.mark(x, y);
+        grid.putPixel(p);
+        trail.mark(p);
         score = score + 1;
     };
 
