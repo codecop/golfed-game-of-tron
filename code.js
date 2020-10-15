@@ -1,7 +1,5 @@
 var lastKeyEvent = 0;
-var c = document.getElementById("gc");
-
-var graphics;
+var ui;
 var tronTrail = {};
 var score = 0;
 var width = 150;
@@ -13,14 +11,27 @@ function keyPressed(event) {
     lastKeyEvent = event;
 }
 
+function Area() {
+    var c = document.getElementById("gc");
+    var graphics = c.getContext('2d');
+
+    this.clear = function(width, height) {
+        graphics.fillRect(0, 0, width, height);
+    };
+
+    this.putPixel = function(x, y) {
+        graphics.clearRect(x, y, 1, 1, 0);
+    };
+}
+
 function startGame() {
-    graphics = c.getContext('2d');
+    ui = new Area();
     tronTrail = {};
     score = 0;
     tronX = width / 2;
     tronY = width / 2;
 
-    graphics.fillRect(0, 0, width, width);
+    ui.clear(width, width);
 
     threadHandle = setInterval(advanceGame, 9);
 }
@@ -66,7 +77,7 @@ function advanceGame() {
 }
 
 function drawTron() {
-    graphics.clearRect(tronX, tronY, 1, 1, 0); // 0 is ok because only 1 test
+    ui.putPixel(tronX, tronY);
 }
 
 function collision() {
