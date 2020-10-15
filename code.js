@@ -16,6 +16,22 @@ function getGraphicsFor(elementId) {
 function Point(x, y) {
     this.x = x;
     this.y = y;
+
+    this.up = function() {
+        return new Point(x, y - 1);
+    };
+
+    this.right = function() {
+        return new Point(x + 1, y);
+    };
+
+    this.down = function() {
+        return new Point(x, y + 1);
+    };
+
+    this.left = function() {
+        return new Point(x - 1, y);
+    };
 }
 
 /**
@@ -104,48 +120,51 @@ function Game(grid, trail, dimension, speed) {
     var position = dimension.center();
     var score = 0;
 
-    this.lastKeyEvent = 0;
+    /** @type {KeyboardEvent} */
+    this.lastKeyEvent = null;
 
     var threadHandle;
     this.startGameLoop = function() {
         var self = this;
-        function advance() {
-            self.advance();
+        function gameLoop() {
+            self.gameLoop();
         }
-        threadHandle = setInterval(advance, speed);
+        threadHandle = setInterval(gameLoop, speed);
     };
 
-    this.advance = function() {
+    this.gameLoop = function() {
         if (this.lastKeyEvent) {
-            var hitsWall = dimension.isOutside(position);
-            if (hitsWall) {
-                this.collision();
-                return
-            }
+            var direction = this.lastKeyEvent.which & 3 ;
+            this.advance(direction);
+        }
+    };
 
-            var x = position.x;
-            var y = position.y;
-            switch (this.lastKeyEvent.which & 3) {
-                case 0:
-                    x += 1;
-                    break;
-                case 1:
-                    y -= 1;
-                    break;
-                case 2:
-                    x -= 1;
-                    break;
-                case 3:
-                    y += 1;
-                    break;
-            }
-            position = new Point(x, y);
+    this.advance = function(direction) {
+        var hasHitWall = dimension.isOutside(position);
+        if (hasHitWall) {
+            this.collision();
+            return
+        }
 
-            if (trail.isFree(position)) {
-                this.tronMoves();
-            } else {
-                this.collision();
-            }
+        switch (direction) {
+            case 1: // i
+                position = position.up();
+                break;
+            case 2: // j
+                position = position.left();
+                break;
+            case 3: // k
+                position = position.down();
+                break;
+            case 0: // l
+                position = position.right();
+                break;
+        }
+
+        if (trail.isFree(position)) {
+            this.tronMoves();
+        } else {
+            this.collision();
         }
     };
 
@@ -174,6 +193,9 @@ function startGame() {
     game.startGameLoop();
 }
 
+/**
+ * @param {KeyboardEvent} event
+ */
 function keyPressed(event) {
     if (game) {
         game.lastKeyEvent = event;
