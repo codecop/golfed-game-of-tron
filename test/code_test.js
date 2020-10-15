@@ -48,7 +48,7 @@ describe('Game of Tron', function () {
 
         it('should draw the fillRect on start', function () {
             sinon.assert.calledOnce(context.fillRect);
-            sinon.assert.calledWith(context.fillRect, 0, 0, 150, 11325);
+            sinon.assert.calledWith(context.fillRect, 0, 0, 150, 150);
         });
 
         it('should do nothing until key is pressed', function () {

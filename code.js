@@ -19,8 +19,9 @@ function startGame() {
     score = 0;
     tronX = width / 2;
     tronY = width / 2;
-    var tronPos = asPos(tronX, tronY);
-    graphics.fillRect(0, 0, width, tronPos);
+
+    graphics.fillRect(0, 0, width, width);
+
     threadHandle = setInterval(advanceGame, 9);
 }
 
@@ -52,7 +53,6 @@ function advanceGame() {
         }
 
         var tronPos = asPos(tronX, tronY);
-
         if ((tronTrail[tronPos] ^= 1)) {
 
             drawTron();
