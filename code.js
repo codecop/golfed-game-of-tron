@@ -2,7 +2,7 @@ var lastKeyEvent = 0;
 var c = document.getElementById("gc");
 
 var graphics;
-var grid = {};
+var tronTrail = {};
 var score = 0;
 var width = 150;
 var tronPos;
@@ -14,48 +14,46 @@ function keyPressed(event) {
 
 function startGame() {
     graphics = c.getContext('2d');
-    grid = {};
+    tronTrail = {};
     score = 0;
-    tronPos = width * (width/2) + (width/2); // Tron's position, and is set to 11325 (11325=150*75+75=center of the grid).
+    tronPos = asPos(width / 2, width / 2);
     graphics.fillRect(0, 0, width, tronPos);
     threadHandle = setInterval(advanceGame, 9);
+}
+
+function asPos(x, y) {
+    return width * y + x;
 }
 
 function advanceGame() {
     if (lastKeyEvent) {
         var x = tronPos % width;
         var y = tronPos / width;
-        if (x <= 0) {
-            // left wall (and right wall)
-            collision();
-            return
-        }
-        if (x < 0) {
-            // upper wall
-            collision();
-            return
-        }
-        if (y >= width) {
-            // lower wall
+
+        var hitsWall = (x <= 0) || (y > width);
+        if (hitsWall) {
             collision();
             return
         }
 
-        tronPos += [1, -width, -1, width][lastKeyEvent.which & 3];
-        if ((grid[tronPos] ^= 1)) {
-            // Updates x based on the value of e .
+        var direction = [1, -width, -1, width][lastKeyEvent.which & 3];
+        tronPos += direction;
 
-            var x = tronPos % width;
-            var y = tronPos / width;
+        if ((tronTrail[tronPos] ^= 1)) {
 
-            // draw a white pixel at the Tron's position
-            graphics.clearRect(x, y, 1, 1, score++);
+            drawTron();
+            score = score + 1;
 
-            return;
+        } else {
+            collision();
         }
-
-        collision();
     }
+}
+
+function drawTron() {
+    var x = tronPos % width;
+    var y = tronPos / width;
+    graphics.clearRect(x, y, 1, 1, score);
 }
 
 function collision() {
