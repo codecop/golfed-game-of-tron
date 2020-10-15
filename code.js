@@ -47,10 +47,6 @@ function Dimension(width, height) {
         return new Point(width / 2, height / 2);
     };
 
-    this.isOutside = function(point) {
-        return !this.isInside(point);
-    };
-
     this.isInside = function(point) {
         return (point.x > 0) &&
             (point.x < width) &&
@@ -117,35 +113,53 @@ function Marker2D(maxX) {
  * @param {number} speed
  */
 function Game(grid, trail, dimension, speed) {
+
     var position = dimension.center();
     var score = 0;
 
     /** @type {KeyboardEvent} */
-    this.lastKeyEvent = null;
+    var lastKeyEvent = null;
 
     var threadHandle;
     this.startGameLoop = function() {
-        var self = this;
-        function gameLoop() {
-            self.gameLoop();
-        }
         threadHandle = setInterval(gameLoop, speed);
     };
 
-    this.gameLoop = function() {
-        if (this.lastKeyEvent) {
-            var direction = this.lastKeyEvent.which & 3 ;
-            this.advance(direction);
+    function gameLoop() {
+        if (lastKeyEvent) {
+            var direction = lastKeyEvent.which & 3;
+            advance(direction);
         }
+    }
+
+    /**
+     * @param {KeyboardEvent} event
+     */
+    this.setLastKeyEvent = function(event) {
+        lastKeyEvent = event;
     };
 
-    this.advance = function(direction) {
-        var hasHitWall = dimension.isOutside(position);
-        if (hasHitWall) {
-            this.collision();
+    function advance(direction) {
+        if (hasHitWall()) {
+            collision();
             return
         }
 
+        movePositionInto(direction);
+
+        if (hasHitTrail()) {
+            collision();
+            return;
+        }
+
+        moveTron();
+    }
+
+    function hasHitWall() {
+        return !dimension.isInside(position);
+    }
+
+    function movePositionInto(direction) {
         switch (direction) {
             case 1: // i
                 position = position.up();
@@ -160,26 +174,26 @@ function Game(grid, trail, dimension, speed) {
                 position = position.right();
                 break;
         }
+    }
 
-        if (trail.isFree(position)) {
-            this.tronMoves();
-        } else {
-            this.collision();
-        }
-    };
+    function hasHitTrail() {
+        return !trail.isFree(position);
+    }
 
-    this.tronMoves = function() {
+    function moveTron() {
         grid.putPixel(position);
         trail.mark(position);
         score = score + 1;
-    };
+    }
 
-    this.collision = function() {
-        // We replace the page's content with "game over" and the score.
+    function collision() {
         document.body.innerHTML = "game over: " + score;
-        clearInterval(threadHandle);
-    };
+        stopGameLoop();
+    }
 
+    function stopGameLoop() {
+        clearInterval(threadHandle);
+    }
 }
 
 var game;
@@ -198,7 +212,7 @@ function startGame() {
  */
 function keyPressed(event) {
     if (game) {
-        game.lastKeyEvent = event;
+        game.setLastKeyEvent(event);
     }
 }
 
