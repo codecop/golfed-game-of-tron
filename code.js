@@ -53,7 +53,8 @@ function advanceGame() {
         }
 
         var tronPos = asPos(tronX, tronY);
-        if ((tronTrail[tronPos] ^= 1)) {
+        tronTrail[tronPos] ^= 1;
+        if (tronTrail[tronPos] === 1) {
 
             drawTron();
             score = score + 1;
