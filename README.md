@@ -51,3 +51,4 @@ To run the test:
 ### Trial Run
 
 * 1h 45' for refactoring until everything is in classes.
+* 1h for more refactoring for dimension, point and smaller methods.
