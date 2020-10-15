@@ -43,20 +43,16 @@ function TronTrail(width) {
 }
 
 function startGame() {
-    ui = new DrawingArea();
     trail = new TronTrail(width);
 
     score = 0;
     tronX = width / 2;
     tronY = width / 2;
 
+    ui = new DrawingArea();
     ui.clear(width, width);
 
     threadHandle = setInterval(advanceGame, 9);
-}
-
-function asPos(x, y) {
-    return width * y + x;
 }
 
 function advanceGame() {
@@ -82,12 +78,9 @@ function advanceGame() {
                 break;
         }
 
-
         if (trail.isFree(tronX, tronY)) {
-            trail.mark(tronX, tronY);
 
-            drawTron();
-            score = score + 1;
+            tronMoves();
 
         } else {
             collision();
@@ -95,8 +88,10 @@ function advanceGame() {
     }
 }
 
-function drawTron() {
+function tronMoves() {
     ui.putPixel(tronX, tronY);
+    trail.mark(tronX, tronY);
+    score = score + 1;
 }
 
 function collision() {
