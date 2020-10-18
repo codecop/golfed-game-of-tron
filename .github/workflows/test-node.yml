@@ -13,5 +13,6 @@ jobs:
         node-version: 10.x
     - name: Build and test
       run: |
+          cd JavaScript
           npm i
           npm test
