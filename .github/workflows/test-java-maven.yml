@@ -26,8 +26,9 @@ jobs:
         run: |
             export DISPLAY=:99
             cd Java
-            mvn -B verify || exit 0
-      - uses: actions/upload-artifact@v2
-        with:
-          name: JavaSources
-          path: Java/src
+            mvn -B test
+#            mvn -B test || exit 0
+#      - uses: actions/upload-artifact@v2
+#        with:
+#          name: JavaTestSources
+#          path: Java/src/test/java
