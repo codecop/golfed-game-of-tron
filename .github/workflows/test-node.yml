@@ -1,16 +1,26 @@
 name: Test Node.js
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'JavaScript/**'
+      - '.github/workflows/test-node.yml'
+  pull_request:
+    paths:
+      - 'JavaScript/**'
+      - '.github/workflows/test-node.yml'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
+
     - name: Set up Node.js 10.x
       uses: actions/setup-node@v7
       with:
         node-version: 10.x
+
     - name: Build and test
       run: |
           cd JavaScript

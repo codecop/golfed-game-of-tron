@@ -1,6 +1,14 @@
 name: Test Java UI Maven
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'Java/**'
+      - '.github/workflows/test-java-maven.yml'
+  pull_request:
+    paths:
+      - 'Java/**'
+      - '.github/workflows/test-java-maven.yml'
 
 jobs:
   build:
@@ -11,27 +19,28 @@ jobs:
             sudo apt-get update
             sudo apt-get install xvfb
             Xvfb :99 &
+
       - uses: actions/checkout@v7
+
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          distribution: 'temurin'
+          java-version: 8
+
       - name: Cache Maven packages
         uses: actions/cache@v6
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+
       - name: Build and test
         run: |
             export DISPLAY=:99
             cd Java
             mvn -B package
-#            mvn -B package || exit 0
-#      - uses: actions/upload-artifact@v2
-#        with:
-#          name: JavaTestSources
-#          path: Java/src/test/java
+
       - uses: actions/upload-artifact@v2
         with:
           name: golfed-game-of-tron.jar
