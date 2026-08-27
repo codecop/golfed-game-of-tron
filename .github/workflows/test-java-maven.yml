@@ -41,7 +41,7 @@ jobs:
             cd Java
             mvn -B package
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v7
         with:
           name: golfed-game-of-tron.jar
           path: Java/target/golfed-game-of-tron-1.0-SNAPSHOT.jar
